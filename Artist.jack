@@ -1,48 +1,53 @@
 /** Collected methods for drawing a puzzle configuration */
 class Artist {
 
-    // to do: these should be made static
-	field int xMax, yMax;
+    static int yMax;
 
-    // attributes copied from constructor arguments
+    // fields copied from constructor arguments
     field int n, pegWidth, diskHeight, diskSpacing;
 
-    // attributes computed independently of n
-    field int baseTop;
-    field int minDiskWidth, maxDiskWidth;
+    // fields computed independently of n
+    field int minDiskWidth;
     field Array pegCenters;
 
-    // attributes computed as functions of n
+    // fields computed as functions of n
     field int diskWidthDec;
     field int pegHeight;
 
     // initialize local variables (do not draw)
-	constructor Artist new(int num, int pw, int dh, int ds) {
-		let n = num;
+	constructor Artist new(int numDisks, int pw, int dh, int ds) {
+        var int xMax, maxDiskWidth;
 
-        // to do: these two should be static
-		let xMax = 511;
-		let yMax = 255;
+        /* static fields */
 
+        let yMax = 255;
+
+        /* fields copied from arguments */
+
+		let n = numDisks;
         let pegWidth = pw;
 		let diskHeight = dh;
         let diskSpacing = ds;
 
-        /* locals independent of n */
+        /* fields independent of n */
 
-        let baseTop = yMax;
-
+        // disks must fit on pegs
         let minDiskWidth = 2 * pegWidth;
-        let maxDiskWidth = (xMax - (4 * diskSpacing)) / 3;
 
+        // ensure that large disks fit on adjacent pegs
         let pegCenters = Array.new(3);
+        let xMax = 511;
         let pegCenters[0] = xMax / 6;
         let pegCenters[1] = xMax / 2;
         let pegCenters[2] = 5 * xMax / 6;
 
-        /* locals depending on n */
+        /* fields depending on n */
 
+        // ensure that largest disk fits on pegs
+        let maxDiskWidth = (xMax - (4 * diskSpacing)) / 3;
+        // decrease disk size to form a smooth tower
         let diskWidthDec = (maxDiskWidth - minDiskWidth) / (n - 1);
+        // ensure that a tower fits on a peg
         let pegHeight = (n + 1) * diskHeight;
 
 		return this;
@@ -56,8 +61,8 @@ class Artist {
 
         let x1 = pegCenters[j] - (diskWidth(i) / 2);
         let x2 = pegCenters[j] + (diskWidth(i) / 2);
-        do Artist.drawWhiteRect(x1, baseTop - (k * diskHeight) - diskHeight,
-                                x2, baseTop - (k * diskHeight));
+        do Artist.drawWhiteRect(x1, yMax - (k * diskHeight) - diskHeight,
+                                x2, yMax - (k * diskHeight));
 
         return;
     }
@@ -84,9 +89,9 @@ class Artist {
         let i = 0;
         while (i < 3) {
             do Screen.drawRectangle(pegCenters[i] - (pegWidth / 2),
-                                baseTop - pegHeight,
+                                yMax - pegHeight,
                                 pegCenters[i] + (pegWidth / 2),
-                                baseTop);
+                                yMax);
             let i = i + 1;
         }
 
@@ -95,20 +100,10 @@ class Artist {
 
     /* draw helpers */
 
-    // draw a transparent rectangle with a black border
-    function void drawFrame(int x1, int y1, int x2, int y2) {
-        do Screen.setColor(true);
-        do Screen.drawLine(x1, y1, x2, y1);
-        do Screen.drawLine(x1, y1, x1, y2);
-        do Screen.drawLine(x1, y2, x2, y2);
-        do Screen.drawLine(x2, y1, x2, y2);
-
-        return;
-    }
-
     // draw a white rectangle white a black border
     function void drawWhiteRect(int x1, int y1, int x2, int y2) {
-        do Artist.drawFrame(x1, y1, x2, y2);
+        do Screen.setColor(true);
+        do Screen.drawRectangle(x1, y1, x2, y2);
 
         do Screen.setColor(false);
         do Screen.drawRectangle(x1 + 1, y1 + 1, x2 - 1, y2 - 1);
