@@ -1,0 +1,99 @@
+/** Simple implementation of a stack using a linked list */
+class Stack {
+
+	field int size;
+	field Node top;
+
+	constructor Stack new() {
+		let top = null;
+		let size = 0;
+
+		return this;
+	}
+
+	method int getSize() {
+		return size;
+	}
+
+	// convert stack to array (useful when an external class needs to traverse the stack)
+	method Array toArray() {
+		var Array array;
+		var Node node;
+		var int i;
+
+		let array = Array.new(size);
+		let i = 0;
+		let node = top;
+		while (~(node = null)) {
+			let array[i] = node.value();
+
+			let i = i + 1;
+			let node = node.next();
+		}
+
+		return array;
+	}
+
+	method void push(int x) {
+		let top = Node.new(x, top);
+		let size = size + 1;
+
+		return;
+	}
+
+	// peek at the n-th value in the stack (0 is the top)
+	method int peek(int n) {
+		var Node node;
+		var int i;
+
+		if (n < 0) {
+			do Out.printStringLn("error in `Stack.peek`: invalid argument");
+			return 0;
+		}
+
+		if (n > (size - 1)) {
+			do Out.printStringLn("error in `Stack.peek`: stack underflow");
+			return 0;
+		}
+
+		let node = top;
+		let i = 0;
+		while (i < n) {
+			let node = node.next();
+		}
+
+		return node.value();
+	}
+
+	method int pop() {
+		var int value;
+		var Node temp;
+
+		if (size = 0) {
+			do Out.printStringLn("error in `Stack.pop`: cannot pop empty stack");
+			return 0;
+		}
+
+		// note: do not call `dispose` (causes memory leak)
+		let value = top.value();
+		let temp = top.next();
+		let top = temp;
+		let size = size - 1;
+
+		return value;
+	}
+
+	method boolean isEmpty() {
+		return size = 0;
+	}
+
+	method void dispose() {
+		if (~(top = null)) {
+			do top.dispose();
+		}
+		do Memory.deAlloc(this);
+
+		return;
+	}
+
+}

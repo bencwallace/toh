@@ -1,0 +1,10 @@
+/** Miscellaneous helper functions for output */
+class Out {
+
+	function void printStringLn(String s) {
+		do Output.printString(s);
+		do Output.println();
+		return;
+	}
+
+}

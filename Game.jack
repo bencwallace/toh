@@ -1,0 +1,75 @@
+/** Game runner class */
+class Game {
+
+	field int n;
+
+	constructor Game new(int num) {
+		let n = num;
+
+		return this;
+	}
+
+	method void run() {
+		var Puzzle puzzle;
+		var boolean selected, quit;
+		var char key;
+		var int from, to;
+		var Stack fromPeg, toPeg;
+		var String s;
+
+		let puzzle = Puzzle.new(n);
+		do puzzle.drawDisks();
+
+		let key = 0;
+		let selected = false;
+		let quit = false;
+		// to do: fix this mess
+		while (~quit) {
+			while (key = 0) {
+				let key = Keyboard.keyPressed();
+			}
+
+			// select or move
+			if ((key = 49) | (key = 50) | (key = 51)) {
+				let s = String.new(1);
+				let s = s.appendChar(key);
+
+				if (~selected) {
+					let from = s.intValue() - 1;
+					do Output.printInt(from);
+					let fromPeg = puzzle.getPeg(from);
+					// do puzzle.drawPegSelect(from);
+					let selected = true;
+				} else {
+					let to = s.intValue() - 1;
+					do Output.printInt(to);
+					let toPeg = puzzle.getPeg(to);
+					// if (toPeg.peek(0) > fromPeg.peek(0)) {
+					// 	do puzzle.move(from, to);
+					// }
+					do puzzle.move(from, to);
+					do puzzle.drawDisks();
+					if (puzzle.isSolved()) {
+						do Output.printString("Congratulations!");
+						let quit = true;
+					}
+					let selected = false;
+				}
+			}
+			if (key = 83) {
+				do Output.printString("solver: not implemented");
+			}
+			// escape
+			if (key = 140) {
+				let quit = true;
+			}
+
+			while (~(key = 0)) {
+				let key = Keyboard.keyPressed();
+			}
+		}
+
+		return;
+	}
+
+}

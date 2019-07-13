@@ -1,0 +1,171 @@
+/** Configuration of (three) pegs in Tower of Hanoi puzzle */
+class Puzzle {
+
+    // number of disks
+    field int n;
+
+    // peg configurations
+    field Stack peg0;
+    field Stack peg1;
+    field Stack peg2;
+
+    // main graphics object
+    field Artist artist;
+
+    constructor Puzzle new(int num) {
+        var int i;
+
+        let n = num;
+        let peg0 = Stack.new();
+        let peg1 = Stack.new();
+        let peg2 = Stack.new();
+
+        // Initialize a full tower on `peg0`
+        let i = n;
+        while (i > 0) {
+            do peg0.push(i);
+            let i = i - 1;
+        }
+
+        // draw initial configuration
+        let artist = Artist.new(n, 10, 10, 5);
+
+        return this;
+    }
+
+    /* main methods */
+
+    // true if there is a full tower on `peg2`
+    method boolean isSolved() {
+        return peg2.getSize() = n;
+    }
+
+    // attempt to move from the top of one peg to the top of another peg
+    method void move(int from, int to) {
+        var int i, fromDisk, toDisk;
+        var Array pegs;
+        var Stack fromPeg, toPeg;
+
+        if ((~(Puzzle._isPeg(from))) & (~(Puzzle._isPeg(to)))) {
+            do Out.printStringLn("error in `Puzzle.move`: invalid peg selected");
+            return;
+        }
+
+        // determine to/from peg and corresponding top disk
+        let pegs = Array.new(3);
+        let pegs[0] = peg0;
+        let pegs[1] = peg1;
+        let pegs[2] = peg2;
+        let i = 0;
+
+        let fromPeg = getPeg(from);
+        if (fromPeg.isEmpty()) {
+            do Out.printStringLn("error in `Puzzle.move`: origin peg is empty");
+            return;
+        }
+        let fromDisk = fromPeg.peek(0);
+
+        let toPeg = getPeg(to);
+        if (toPeg.isEmpty()) {
+            let toDisk = n + 1;
+        } else {
+            let toDisk = toPeg.peek(0);
+        }
+
+        // check if legal move
+        if (toDisk < fromDisk) {
+            do Out.printStringLn("error in `Puzzle.move`: invalid move");
+            do Output.printInt(toDisk);
+            do Output.println();
+            do Output.printInt(fromDisk);
+            return;
+        }
+
+        do toPeg.push(fromPeg.pop());
+
+        return;
+    }
+
+    /* graphics methods */
+
+    // select the top disk of peg j
+    method void drawPegSelect(int j) {
+        var Stack peg;
+        var int disk, level;
+
+        let peg = getPeg(j);
+        if (~(peg.isEmpty())) {
+            let disk = peg.peek(0);
+            let level = peg.getSize() - 1;
+            do artist.drawDiskSelect(disk, j, level);
+        }
+
+        return;
+    }
+
+    // draw current configuration of disks
+    method void drawDisks() {
+        var Array pegs, disks;
+        var Stack peg;
+        var int i, j, numDisks;
+
+        do Screen.clearScreen();
+        do artist.drawPegs();
+
+        let i = 0;
+        while (i < 3) {
+            let peg = getPeg(i);
+            let numDisks = peg.getSize();
+
+            if (numDisks > 0) {
+                let disks = Array.new(peg.getSize());
+                let disks = peg.toArray();
+
+                let j = 0;
+                while (j < peg.getSize()) {
+                    // the calculation of the third argument below uses
+                    // the fact that `disks` is in increasing order
+                    do artist.drawDisk(disks[j], i, peg.getSize() - j - 1);
+
+                    let j = j + 1;
+                }
+            }
+
+            let i = i + 1;
+        }
+
+        return;
+    }
+
+    /* other methods */
+
+    method Stack getPeg(int j) {
+        if (j = 0) {
+            return peg0;
+        }
+        if (j = 1) {
+            return peg1;
+        }
+        if (j = 2) {
+            return peg2;
+        } else {
+            do Output.printString("error: unrecognized peg");
+            return null;
+        }
+    }
+
+    method void dispose() {
+        do peg0.dispose();
+        do peg1.dispose();
+        do peg2.dispose();
+        do Memory.deAlloc(this);
+
+        return;
+    }
+
+    // determine if an integer corresponds to a valid peg
+    function boolean _isPeg(int i) {
+        return (i > 0) & (i < 4);
+    }
+
+}

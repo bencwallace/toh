@@ -1,0 +1,31 @@
+/** Node in a linked list (with integer values) */
+class Node {
+
+	field int val;
+	field Node ptr;
+
+	constructor Node new(int value, Node pointer) {
+		let val = value;
+		let ptr = pointer;
+
+		return this;
+	}
+
+	method int value() {
+		return val;
+	}
+
+	method Node next() {
+		return ptr;
+	}
+
+	method void dispose() {
+		if (~(ptr = null)) {
+			do ptr.dispose();
+		}
+		do Memory.deAlloc(this);
+
+		return;
+	}
+
+}

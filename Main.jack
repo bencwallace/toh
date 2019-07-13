@@ -1,0 +1,15 @@
+/** Tower of Hanoi puzzle */
+class Main {
+
+	function void main() {
+		var Game game;
+		var int n;
+
+		let n = Keyboard.readInt("");
+		let game = Game.new(n);
+		do game.run();
+
+		return;
+	}
+
+}
