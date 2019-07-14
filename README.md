@@ -9,6 +9,10 @@ Upon execution, you will be prompted for the number of disks to play with. Pegs 
 the left. Select the top disk of a peg by pressing on the corresponding number on your keyboard. Release selected
 disk similarly. To view the solution, press Enter; then press any key to step through the solution. Press Esc to quit.
 
+This Jack program is a good example of how the Hack platform and Jack compiler can handle object-oriented code
+involving simple recursive algorithms and common data structures (stacks and queues) as well as simple graphics
+manipulations.
+
 <table style="width:100%">
 	<!-- Images -->
 	<tr><td><img src="images/toh1.png" style="width:100%" /></td></tr>
