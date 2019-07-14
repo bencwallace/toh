@@ -1,0 +1,60 @@
+class Solver {
+
+	field int n, numMoves;
+	field Queue moves;
+
+	constructor Solver new(int numDisks) {
+		let n = numDisks;
+		let moves = solve(numDisks, 0, 2);
+		let numMoves = moves.getSize();
+
+		return this;
+	}
+
+	// note: second recursive call is inefficient
+	// could be improved by constructing `tail` by
+	// making the substitution (`from` -> `other` -> `to` -> `from`)
+	// in the first part of `soln`
+	method Queue solve(int numDisks, int from, int to) {
+		var Queue soln, tail;
+		var int other;
+
+		let soln = Queue.new();
+		let other = Solver.otherPeg(from, to);
+
+		if (numDisks = 1) {
+			do soln.enqueue(from);
+			do soln.enqueue(to);
+			return soln;
+		} else {
+			// first recursive call
+			let soln = solve(numDisks - 1, from, other);
+
+			// append intermediate step
+			do soln.enqueue(from);
+			do soln.enqueue(to);
+
+			// append result of second recursive call
+			let tail = solve(numDisks - 1, other, to);
+			while (~tail.isEmpty()) {
+				do soln.enqueue(tail.dequeue());
+			}
+		}
+
+		return soln;
+	}
+
+	method int nextMove() {
+		return moves.dequeue();
+	}
+
+	// returns the identifier (0, 1, or 2) of the peg that is not `from` or `to`
+	function int otherPeg(int pegX, int pegY) {
+		return 3 - (pegX + pegY);
+	}
+
+	function boolean even(int n) {
+		return (2 * (n / 2)) = n;
+	}
+
+}

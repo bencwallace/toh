@@ -5,7 +5,7 @@ class Main {
 		var Game game;
 		var int n;
 
-		let n = Keyboard.readInt("");
+		let n = Keyboard.readInt("Number of disks to play with: ");
 		let game = Game.new(n);
 		do game.run();
 

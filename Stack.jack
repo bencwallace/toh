@@ -15,23 +15,8 @@ class Stack {
 		return size;
 	}
 
-	// convert stack to array (useful when an external class needs to traverse the stack)
-	method Array toArray() {
-		var Array array;
-		var Node node;
-		var int i;
-
-		let array = Array.new(size);
-		let i = 0;
-		let node = top;
-		while (~(node = null)) {
-			let array[i] = node.value();
-
-			let i = i + 1;
-			let node = node.next();
-		}
-
-		return array;
+	method boolean isEmpty() {
+		return size = 0;
 	}
 
 	method void push(int x) {
@@ -83,8 +68,22 @@ class Stack {
 		return value;
 	}
 
-	method boolean isEmpty() {
-		return size = 0;
+	// convert stack to array (useful when an external class needs to traverse the stack)
+	method Array toArray() {
+		var Array array;
+		var Node node;
+		var int i;
+
+		let array = Array.new(size);
+		let i = 0;
+		let node = top;
+		while (~(node = null)) {
+			let array[i] = node.value();
+			let i = i + 1;
+			let node = node.next();
+		}
+
+		return array;
 	}
 
 	method void dispose() {

@@ -46,7 +46,11 @@ class Artist {
         // ensure that largest disk fits on pegs
         let maxDiskWidth = (xMax - (4 * diskSpacing)) / 3;
         // decrease disk size to form a smooth tower
-        let diskWidthDec = (maxDiskWidth - minDiskWidth) / (n - 1);
+        if (n > 1) {
+            let diskWidthDec = (maxDiskWidth - minDiskWidth) / (n - 1);
+        } else {
+            let diskWidthDec = 0;
+        }
         // ensure that a tower fits on a peg
         let pegHeight = (n + 1) * diskHeight;
 
@@ -74,8 +78,8 @@ class Artist {
         let x1 = pegCenters[j] - (diskWidth(i) / 2);
         let x2 = pegCenters[j] + (diskWidth(i) / 2);
         do Screen.setColor(true);
-        do Screen.drawRectangle(x1, baseTop - (k * diskHeight) - diskHeight,
-                                x2, baseTop - (k * diskHeight));
+        do Screen.drawRectangle(x1, yMax - (k * diskHeight) - diskHeight,
+                                x2, yMax - (k * diskHeight));
 
         return;
     }

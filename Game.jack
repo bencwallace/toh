@@ -1,25 +1,25 @@
 /** Game runner class */
 class Game {
 
-	// number of disks
 	field int n;
+	field Puzzle puzzle;
 
 	constructor Game new(int num) {
 		let n = num;
+		let puzzle = Puzzle.new(n);
 
 		return this;
 	}
 
 	// run a game
 	method void run() {
-		var Puzzle puzzle;
 		var boolean selected, quit;
 		var char key;
 		var int from, to;
 		var Stack fromPeg, toPeg;
 		var String s;
+		var Solver solver;
 
-		let puzzle = Puzzle.new(n);
 		do puzzle.drawDisks();
 
 		let key = 0;
@@ -57,7 +57,37 @@ class Game {
 			}
 			// enter key
 			if (key = 128) {
-				do Output.printString("solver: not implemented");
+				// build solution
+				let solver = Solver.new(n);
+
+				// reset game
+				let puzzle = Puzzle.new(n);
+				do puzzle.drawDisks();
+
+				while(~(key=0)) {
+					let key = Keyboard.keyPressed();
+				}
+
+				// animate solution
+				while (~puzzle.isSolved()) {
+					while (key = 0) {
+						let key = Keyboard.keyPressed();
+					}
+
+					let from = solver.nextMove();
+					let to = solver.nextMove();
+
+					do puzzle.drawPegSelect(from);
+					do Sys.wait(200);
+					do puzzle.move(from, to);
+					do puzzle.drawDisks();
+
+					while (~(key = 0)) {
+						let key = Keyboard.keyPressed();
+					}
+				}
+
+				let quit = true;
 			}
 			// escape key
 			if (key = 140) {

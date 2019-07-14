@@ -1,0 +1,79 @@
+class Queue {
+
+	field int size;
+	field Node first, last;
+
+	constructor Queue new() {
+		let first = null;
+		let last = null;
+		let size = 0;
+
+		return this;
+	}
+
+	method int getSize() {
+		return size;
+	}
+
+	method boolean isEmpty() {
+		return size = 0;
+	}
+
+	method void enqueue(int val) {
+		var Node newLast;
+
+		let newLast = Node.new(val, null);
+		if (~(size = 0)) {
+			do last.setNext(newLast);
+		} else {
+			let first = newLast;
+		}
+		let last = newLast;
+		let size = size + 1;
+
+		return;
+	}
+
+	method int dequeue() {
+		var int val;
+
+		if (isEmpty()) {
+			do Out.printStringLn("error in `Queue.dequeue`: queue underflow");
+			return 0;
+		}
+
+		let val = first.value();
+		let first = first.next();
+		let size = size - 1;
+
+		return val;
+	}
+
+	method Array toArray() {
+		var Array array;
+		var Node node;
+		var int i;
+
+		let array = Array.new(size);
+		let i = 0;
+		let node = first;
+		while (~(node = null)) {
+			let array[i] = node.value();
+			let i = i + 1;
+			let node = node.next();
+		}
+
+		return array;
+	}
+
+	method void dispose() {
+		if (~(first = null)) {
+			// this will also dispose of `last` due to linked-list implementation
+			do first.dispose();
+		}
+		do Memory.deAlloc(this);
+
+		return;
+	}
+
+}

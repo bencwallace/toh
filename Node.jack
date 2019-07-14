@@ -19,6 +19,13 @@ class Node {
 		return ptr;
 	}
 
+	// for Queue
+	method void setNext(Node node) {
+		let ptr = node;
+
+		return;
+	}
+
 	method void dispose() {
 		if (~(ptr = null)) {
 			do ptr.dispose();
