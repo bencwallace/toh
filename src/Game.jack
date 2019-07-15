@@ -13,9 +13,9 @@ class Game {
 
 	// run a game
 	method void run() {
-		var boolean selected, quit;
+		var boolean selected, quit, autosolve;
 		var char key;
-		var int from, to;
+		var int from, to, wait1, wait2;
 		var Stack fromPeg, toPeg;
 		var String s;
 		var Solver solver;
@@ -59,18 +59,30 @@ class Game {
 			if (key = 128) {
 				// build solution
 				let solver = Solver.new(n);
+				let wait1 = 200;
+				let wait2 = 0;
 
 				// reset game
 				let puzzle = Puzzle.new(n);
 				do puzzle.drawDisks();
 
-				while(~(key=0)) {
+				// wait for key release
+				while (~(key = 0)) {
+					let key = Keyboard.keyPressed();
+				}
+
+				// space (step through solution) or enter (autosolve)
+				while(~((key=32) | (key = 128))) {
 					let key = Keyboard.keyPressed();
 				}
 
 				// animate solution
 				while (~puzzle.isSolved()) {
-					while (key = 0) {
+					if (key = 128) {
+						let autosolve = true;
+						let wait2 = 200;
+					}
+					while (~((key = 32) | (key = 128) | autosolve)) {
 						let key = Keyboard.keyPressed();
 					}
 
@@ -78,11 +90,12 @@ class Game {
 					let to = solver.nextMove();
 
 					do puzzle.drawPegSelect(from);
-					do Sys.wait(200);
+					do Sys.wait(wait1);
 					do puzzle.move(from, to);
 					do puzzle.drawDisks();
+					do Sys.wait(wait2);
 
-					while (~(key = 0)) {
+					while (~((key = 0) & autosolve)) {
 						let key = Keyboard.keyPressed();
 					}
 				}
