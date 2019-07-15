@@ -59,7 +59,6 @@ class Stack {
 			return 0;
 		}
 
-		// note: do not call `dispose` (causes memory leak)
 		let value = top.value();
 		let temp = top.next();
 		let top = temp;

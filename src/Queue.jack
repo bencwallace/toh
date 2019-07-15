@@ -1,3 +1,4 @@
+/** Simple implementation of a queue using a linked lis */
 class Queue {
 
 	field int size;
@@ -47,23 +48,6 @@ class Queue {
 		let size = size - 1;
 
 		return val;
-	}
-
-	method Array toArray() {
-		var Array array;
-		var Node node;
-		var int i;
-
-		let array = Array.new(size);
-		let i = 0;
-		let node = first;
-		while (~(node = null)) {
-			let array[i] = node.value();
-			let i = i + 1;
-			let node = node.next();
-		}
-
-		return array;
 	}
 
 	method void dispose() {
